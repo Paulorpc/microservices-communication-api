@@ -7,17 +7,23 @@ Serão utilizados para o projeto:
 
 1. Java / Maven
 2. Spring Boot / Spring Cloud
-3. Docker
+3. Docker (docker-compose)
 4. MySQL
 5. RabbitMQ
 
-### MYSQL
-Na pasta docker foi criado os YAML para coposição das images. É necessário criar o database `banco`.
+### AMBIENTE DESENVOLVIMENTO
+Todo ambiente pode ser criado utilizando docker-compose. Na pasta docker foi criado o YAML para coposição das imagens, utilizando a nomenclatura padrão para simplificar a execução. 
 ```shell
-$ docker-compose -f docker-mysql.yml up -d
-$ docker exec -it <nome_container> mysql -u root -p
+$ cd <project_folder>/docker
+$ docker-compose up -d
+```
+
+### MYSQL
+Após rodar o docker-compose.yml, é necessário criar o database `banco` no banco de dados MySQL.
+```shell
+$ docker exec -it <container_name> mysql -u root -p
 $ root #password
-$ create database banco;  
+$ create database banco;
 ```
 
 ### LOMBOK DEPENDENCY
@@ -26,3 +32,9 @@ A dependencia do lombok é utilizada para gerar métodos, construtores, etc. atr
 ```shell
 $ java -jar ~/Downloads/lombok.jar
 ```
+
+### RABBITMQ
+Com o Rabbitmq funcionando, deve-se criar as filas. Para isso, basta acessar a tab queus e criar as filas necessárias. 
+Atenção para o nome que deve ser identico ao configurado no `application.properties` da API. 
+- fila-saida:    `fila-compras-aguardando`
+- fila-entrada: 

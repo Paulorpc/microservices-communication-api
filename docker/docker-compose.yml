@@ -1,0 +1,29 @@
+version: '3.8'
+
+services: 
+  db:
+    container_name: msc-mysql
+    image: mysql
+    volumes:
+        - dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+  
+  mensageria:
+    container_name: msc-rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - 8881:15672
+      - 5671:5671
+      - 5672:5672
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbit
+      RABBITMQ_DEFAULT_PASS: rabbit
+
+volumes:
+  dbdata:

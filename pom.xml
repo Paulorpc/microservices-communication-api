@@ -11,5 +11,6 @@
 	<name>ms-communication-parent</name>
 	<modules>
 		<module>ms-communication-bank</module>
+		<module>ms-communication-buytrip</module>
 	</modules>
 </project>
