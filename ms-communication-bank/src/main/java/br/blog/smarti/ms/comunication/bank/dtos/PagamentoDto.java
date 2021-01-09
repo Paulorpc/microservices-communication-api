@@ -39,4 +39,12 @@ public class PagamentoDto {
 		this.valorCompra = valorCompra;
 	}
 
+	@Override
+	public String toString() {
+		return "PagamentoDto [nroCartao=" + nroCartao + ", codigoSegurancaCartao=" + codigoSegurancaCartao
+				+ ", valorCompra=" + valorCompra + "]";
+	}
+	
+	
+
 }

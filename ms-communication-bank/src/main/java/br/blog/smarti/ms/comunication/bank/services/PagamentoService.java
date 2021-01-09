@@ -21,13 +21,13 @@ public class PagamentoService{
 	
 	@Transactional
 	public void pagamento(PagamentoDto pagamentoDto){
-	
+		
 		if( !cartaoService.isValido(pagamentoDto.getCodigoSegurancaCartao(), pagamentoDto.getNroCartao()) ){
-			throw new PagamentoException("Cartão inválido.");
+			throw new PagamentoException("Cartão inválido. " + pagamentoDto.toString());
 		}
 		
 		if( !cartaoService.isSaldoSuficiente(pagamentoDto.getCodigoSegurancaCartao(), pagamentoDto.getNroCartao(), pagamentoDto.getValorCompra()) ){
-			throw new PagamentoException("Cartão não possui saldo suficiente.");
+			throw new PagamentoException("Cartão não possui saldo suficiente. " + pagamentoDto.toString());
 		}
 
 		Pagamento pagamento = new Pagamento();

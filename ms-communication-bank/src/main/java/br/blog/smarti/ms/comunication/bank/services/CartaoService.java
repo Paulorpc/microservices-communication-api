@@ -19,6 +19,10 @@ public class CartaoService{
 	public boolean isValido(Integer codigoSegurancaCartao, Integer nroCartao) {
 		return cartaoRepository.findCartaoValido(codigoSegurancaCartao, nroCartao) > 0;
 	}
+	
+	public boolean isValido2(Integer codigoSegurancaCartao, Integer nroCartao) {
+		return cartaoRepository.findCartaoValidoNativeQuery(codigoSegurancaCartao, nroCartao) > 0;
+	}
 
 	public boolean isSaldoSuficiente(Integer codigoSegurancaCartao,
 			Integer nroCartao, BigDecimal valorCompra) {
