@@ -30,8 +30,8 @@ public class CompraController {
 	private String nomeFila;
 
 	@RequestMapping(path = "/hello", method = RequestMethod.GET)
-	public String home() {
-		return "I'm on!";
+	public String status(){
+		return "msc-buytrip is On!";
 	}
 
 	@RequestMapping(path = "/", method = RequestMethod.POST)

@@ -49,7 +49,7 @@ public class ListenerService {
 		PagamentoRetorno pg = bank.pagar(compraChaveDto);
 
 		CompraFinalizadaDto compraFinalizadaDto = new CompraFinalizadaDto();
-		compraFinalizadaDto.setCompraChaveJson(compraChaveDto);
+		compraFinalizadaDto.setCompraChaveDto(compraChaveDto);
 		compraFinalizadaDto.setPagamentoOK(pg.isPagamentoOK());
 		compraFinalizadaDto.setMensagem(pg.getMensagem());
 
