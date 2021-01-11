@@ -21,6 +21,12 @@ public class PagamentoController {
 	@Autowired
 	private PagamentoService pagamentoService;
 	
+
+	@RequestMapping(path = "/hello", method = RequestMethod.GET)
+	public String status(){
+		return "msc-bank is On!";
+	}
+	
 	@RequestMapping(path = "/pagamento", method = RequestMethod.POST)
 	public ResponseEntity<RetornoDto> pagamento(@Valid @NotNull @RequestBody PagamentoDto pagamentoDto) {
 

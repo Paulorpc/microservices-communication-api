@@ -1,7 +1,7 @@
 version: '3.8'
 
 services: 
-  db:
+  db_sql:
     container_name: msc-mysql
     image: mysql
     volumes:
@@ -24,6 +24,21 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: rabbit
       RABBITMQ_DEFAULT_PASS: rabbit
+
+  db_nosql:
+    container_name: msc-redis
+    image: redis
+    ports:
+      - 6379:6379
+
+  consul:
+    container_name: msc-consul
+    image: consul
+    ports:
+      - 8600:53/tcp
+      - 8600:53/udp
+      - 8500:8500
+      - 8400:8400
 
 volumes:
   dbdata:

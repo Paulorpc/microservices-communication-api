@@ -1,5 +1,5 @@
 # Microservices-Communication-API_Java
-API com arquitetura em micro-serviços e comunicação entre módulos usando mensageria.
+API com arquitetura em micro-serviços e comunicação entre módulos usando mensageria e banco de dados no-sql.
 
 A proposta deste projeto é criar uma aplicação de aprendizagem com arquitetura em microserviços com 4 módulos utilizando mensageria. É importante pensar em tolerêcia a falhas (_Design for Failure_) quando se trata de mensageria, já que em grande volumes a troca de mensagens entre os sistema podem sofrer falhas e o client não deve ser impactado. Para issso é usado o _Pattern Circuit Breaker_. 
 
@@ -9,6 +9,7 @@ Serão utilizados para o projeto:
 3. Docker (docker-compose)
 4. MySQL
 5. RabbitMQ
+6. Redis
 
 
 Dependências Relevantes:
@@ -24,15 +25,23 @@ REST API resposável pela recepção de compra. Recebe a requisição de compra 
 Recebe:  Body: `JSON` | Method: `POST` | Dados de compra da realizada pelo cliente.
 Retorna: Status: `200` | msg: `"Compra registrada com sucesso. Aguarda a confirmação do pagamento."`
 
+
 #### ms-communication-buyprocess
-API resposável pelo processamento do pagamento. Irá fazer a recepção das mensagem na fila de aguardando compra, enviará para a API de banco processar o pagamento e envia msg para fila de compras finalizadas. Se o API do banco estiver fora por alguma razão a msg é republicada na fila de compras aguardando processamento para processamento. 
+API resposável pelo processamento do pagamento. Faz a recepção das mensagem na fila de aguardando compra, enviará para a API de banco processar o pagamento e envia msg para fila de compras finalizadas. Se o API do banco estiver fora por alguma razão a msg é republicada na fila de compras aguardando processamento para processamento. 
 Recebe:  Body: `JSON` | Method: `POST` | Dados do pagamento da compra.
 Retorna: Status: `200` | msg: `"Pagamento registrado com sucesso."`
+
 
 #### ms-communication-bank
 REST API resposável pela recepição do pagamento, validar cartão e saldo e atualizar conta do usuário. 
 Recebe:  Body: `JSON` | Method: `POST` | Dados do pagamento da compra.
 Retorna: Status: `200` | msg: `"Pagamento registrado com sucesso."`
+
+
+#### ms-communication-buyfeedback
+API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem na fila de compras finalizadas, registrando a coleção no banco Redis (no-sql).
+Recebe:  Body: `JSON` | Method: `GET` | Chave do pagamento para validação.
+Retorna: Status: `200` | msg: {"id": "99941f3b-c264-416b-9283-838d6c9ee05c", "mensagem": "Pagamento registrado com sucesso", "codigoPassagem": 1, "nroCartao": 123456, "valorPassagem": 400, "pagamentoOK": true}
 
 
 ### AMBIENTE DESENVOLVIMENTO
@@ -64,4 +73,4 @@ Atenção para o nome que deve ser identico ao configurado no `application.prope
   Fila de compras realizada aguardando processamento do pagamento
 
 - fila-entrada:  `fila-compras-finalizado`
-  Fila de 
+  Fila de compras processadas

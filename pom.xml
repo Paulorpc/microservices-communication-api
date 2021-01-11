@@ -13,5 +13,6 @@
 		<module>ms-communication-bank</module>
 		<module>ms-communication-buytrip</module>
 		<module>ms-communication-buyprocess</module>
+		<module>ms-communication-buyfeedback</module>
 	</modules>
 </project>
