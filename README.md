@@ -20,28 +20,21 @@ Dependências Relevantes:
 
 
 ### MÓDULOS
+
 #### ms-communication-buytrip
 REST API resposável pela recepção de compra. Recebe a requisição de compra e envia para fila de entrada onde fica aguardando processamento.
-Recebe:  Body: `JSON` | Method: `POST` | Dados de compra da realizada pelo cliente.
-Retorna: Status: `200` | msg: `"Compra registrada com sucesso. Aguarda a confirmação do pagamento."`
 
 
 #### ms-communication-buyprocess
 API resposável pelo processamento do pagamento. Faz a recepção das mensagem na fila de aguardando compra, enviará para a API de banco processar o pagamento e envia msg para fila de compras finalizadas. Se o API do banco estiver fora por alguma razão a msg é republicada na fila de compras aguardando processamento para processamento. 
-Recebe:  Body: `JSON` | Method: `POST` | Dados do pagamento da compra.
-Retorna: Status: `200` | msg: `"Pagamento registrado com sucesso."`
 
 
 #### ms-communication-bank
 REST API resposável pela recepição do pagamento, validar cartão e saldo e atualizar conta do usuário. 
-Recebe:  Body: `JSON` | Method: `POST` | Dados do pagamento da compra.
-Retorna: Status: `200` | msg: `"Pagamento registrado com sucesso."`
 
 
 #### ms-communication-buyfeedback
 API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem na fila de compras finalizadas, registrando a coleção no banco Redis (no-sql).
-Recebe:  Body: `JSON` | Method: `GET` | Chave do pagamento para validação.
-Retorna: Status: `200` | msg: {"id": "99941f3b-c264-416b-9283-838d6c9ee05c", "mensagem": "Pagamento registrado com sucesso", "codigoPassagem": 1, "nroCartao": 123456, "valorPassagem": 400, "pagamentoOK": true}
 
 
 ### AMBIENTE DESENVOLVIMENTO
@@ -51,13 +44,15 @@ $ cd <project_folder>/docker
 $ docker-compose up -d
 ```
 
+
 ### MYSQL
 Após rodar o docker-compose.yml, é necessário criar o database `banco` no banco de dados MySQL.
 ```shell
-$ docker exec -it <container_name> mysql -u root -p
+$ docker exec -it msc-mysql mysql -u root -p
 $ root #password
 $ create database banco;
 ```
+
 
 ### LOMBOK DEPENDENCY
 A dependencia do lombok é utilizada para gerar métodos, construtores, etc. através de notações (exemplo: `@Data`). É necessário instalar o projeto lombok no IDE que o mesmo reconheça os métodos que não são criados fisicamente no arquivo .java. 
@@ -65,6 +60,7 @@ A dependencia do lombok é utilizada para gerar métodos, construtores, etc. atr
 ```shell
 $ java -jar ~/Downloads/lombok.jar
 ```
+
 
 ### RABBITMQ
 Com o Rabbitmq funcionando, deve-se criar as filas. Para isso, basta acessar a tab queus e criar as filas necessárias. 
@@ -74,3 +70,11 @@ Atenção para o nome que deve ser identico ao configurado no `application.prope
 
 - fila-entrada:  `fila-compras-finalizado`
   Fila de compras processadas
+
+### REDIS
+Para acessar o client do redis para verificar se as coleções estão sendo gravadas corretamente, use o comando abaixo.
+```shell
+$ docker exec -it msc-redis sh
+$ redis-cli
+$ keys *
+```
