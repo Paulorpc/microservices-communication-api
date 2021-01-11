@@ -37,6 +37,10 @@ REST API resposável pela recepição do pagamento, validar cartão e saldo e at
 Recebe:  Body: `JSON` | Method: `POST` | Dados do pagamento da compra.
 Retorna: Status: `200` | msg: `"Pagamento registrado com sucesso."`
 
+#### ms-communication-buyfeedback
+API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem na fila de compras finalizadas, enviando para o cliente o feedback da compra.
+
+
 
 #### ms-communication-buyfeedback
 API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem na fila de compras finalizadas, registrando a coleção no banco Redis (no-sql).
