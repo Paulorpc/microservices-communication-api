@@ -34,7 +34,7 @@ REST API resposável pela recepição do pagamento, validar cartão e saldo e at
 
 
 #### ms-communication-buyfeedback
-API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem na fila de compras finalizadas, registrando a coleção no banco Redis (no-sql).
+REST API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem na fila de compras finalizadas, registrando a coleção no banco Redis (no-sql).
 
 
 ### AMBIENTE DESENVOLVIMENTO
