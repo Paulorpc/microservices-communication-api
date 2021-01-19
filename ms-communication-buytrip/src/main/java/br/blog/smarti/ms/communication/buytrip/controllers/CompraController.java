@@ -51,7 +51,7 @@ public class CompraController {
 		retorno.setMensagem("Compra registrada com sucesso. Aguarda a confirmação do pagamento.");
 		retorno.setChavePesquisa(compraChaveJson.getChave());
 
-		return new ResponseEntity<RetornoDto>(retorno, HttpStatus.OK);
+		return ResponseEntity.ok(retorno);
 	}
 
 }
