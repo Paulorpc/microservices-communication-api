@@ -32,19 +32,30 @@ import br.blog.smarti.ms.communication.buyprocess.dtos.CompraDto;
 
 /***
  * Para que seja mockado a variável restTemplate, ela deve ser um atributo de
- * classe no service, caso contrário é gerado uma nova instância\ ao carregar o
- * método, ou seja, não carrega a instância mockada do teste, tentando fazer a
- * conexão com a API.
+ * classe no service, caso contrário é gerado uma nova instância ao carregar o
+ * método, ou seja, não carrega a instância mockada do teste, assim tentando
+ * fazer a conexão com a API.
  * 
- * Outro detalhe é que quando a insância 'link' em service está sendo atribuido
- * como um value do propertie (application.propertie), é carregado valor null,
- * pois como não é carregado o contexto do sprinboot completo não consegue
- * receber o valor da var. Estou buscando alternativas para tests sem carregar o
- * contexto do springboot para ter melhor performance e evitar dependências
- * externas.
+ * Outro detalhe é que quando a insância 'link' está sendo atribuido como um
+ * value do propertie (application.propertie), é carregado valor null, pois como
+ * não é carregado o contexto do sprinboot completo não consegue receber o valor
+ * da var. Estou buscando alternativas para tests sem carregar o contexto do
+ * springboot para ter melhor performance e evitar dependências externas.
+ * 
+ * '@SpringBootTest' é usado para teste de integração, ou seja, não é usado
+ * mock. Por isso, se usar essa notação, os mocks não irão funcionar.
+ * 
+ * Usando o conjunto de anotações abaixo, consigo carregar o contexto da classe
+ * e carregar o link através do properties, porém não carrega os mocks.
+ * @RunWith(SpringRunner.class) 
+ * @ContextConfiguration(classes = {BankService.class})
+ * @TestPropertySource(locations = {"classpath:application.properties"})
  *
  */
 @RunWith(MockitoJUnitRunner.class)
+//@RunWith(SpringRunner.class)
+//@ContextConfiguration(classes = {BankService.class})
+//@TestPropertySource(locations = {"classpath:application.properties"})
 public class BankServiceTest {
 
 	@Autowired
@@ -61,13 +72,13 @@ public class BankServiceTest {
 	@Before
 	public void beforeEach() {
 		compraChave = new CompraChaveDto();
-		
+
 		CompraDto compra = new CompraDto();
 		compra.setCodigoPassagem(1);
 		compra.setCodigoSegurancaCartao(123456);
 		compra.setNroCartao(12);
 		compra.setValorPassagem(new BigDecimal(200));
-		
+
 		compraChave.setChave(UUID.randomUUID().toString());
 		compraChave.setCompraDto(compra);
 
@@ -79,7 +90,7 @@ public class BankServiceTest {
 	public void shoul_make_payment_calling_bank_module_api() throws IOException {
 		bankRetorno.setMensagem("Pagamento registrado com sucesso");
 
-		when(restTemplate.exchange(Mockito.anyString(), Mockito.<HttpMethod>any(), Mockito.<HttpEntity<?>>any(),
+		when(restTemplate.exchange(Mockito.isNull(), Mockito.<HttpMethod>any(), Mockito.<HttpEntity<?>>any(),
 				Mockito.<Class<?>>any(), Mockito.<Class<?>>any()))
 						.thenReturn(new ResponseEntity(bankRetorno, HttpStatus.OK));
 
@@ -87,7 +98,7 @@ public class BankServiceTest {
 //		ResponseEntity<BankRetornoDto> retorno = ResponseEntity.ok(bankRetorno);
 //		
 //		doReturn(retorno).when(restTemplate).exchange(
-//				  Mockito.anyString(),
+//				  Mockito.isNull(),
 //	              Mockito.<HttpMethod> any(),
 //	              Mockito.<HttpEntity<?>> any(),
 //	              Mockito.<Class<?>> any(),
@@ -105,7 +116,7 @@ public class BankServiceTest {
 		HttpClientErrorException e = new HttpClientErrorException(HttpStatus.BAD_REQUEST,
 				HttpStatus.BAD_REQUEST.toString(), bankRetorno.getMensagem().getBytes(), Charsets.UTF_8);
 
-		when(restTemplate.exchange(Mockito.anyString(), Mockito.<HttpMethod>any(), Mockito.<HttpEntity<?>>any(),
+		when(restTemplate.exchange(Mockito.isNull(), Mockito.<HttpMethod>any(), Mockito.<HttpEntity<?>>any(),
 				Mockito.<Class<?>>any(), Mockito.<Class<?>>any())).thenThrow(e);
 
 		PagamentoRetorno pgto = bankService.pagar(compraChave);

@@ -20,8 +20,8 @@ import br.blog.smarti.ms.communication.buyprocess.dtos.PagamentoDto;
 @Service
 public class BankService {
 
-//	@Value("${bank.link}")
-	private String link = "http://localhost:8090/pagamento";
+	@Value("${bank.link}")
+	private String link;
 	
 	private RestTemplate restTemplate = new RestTemplate();
 
