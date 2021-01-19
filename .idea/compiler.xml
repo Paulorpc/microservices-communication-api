@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ms-communication-bank" />
+        <module name="ms-communication-buyfeedback" />
+        <module name="ms-communication-buyprocess" />
+        <module name="ms-communication-buytrip" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ms-communication-bank" target="1.8" />
+      <module name="ms-communication-buyfeedback" target="1.8" />
+      <module name="ms-communication-buyprocess" target="1.8" />
+      <module name="ms-communication-buytrip" target="1.8" />
+      <module name="ms-communication-parent" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ms-communication-bank" options="-parameters" />
+      <module name="ms-communication-buyfeedback" options="-parameters" />
+      <module name="ms-communication-buyprocess" options="-parameters" />
+      <module name="ms-communication-buytrip" options="-parameters" />
+    </option>
+  </component>
+</project>

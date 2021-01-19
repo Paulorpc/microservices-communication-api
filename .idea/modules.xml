@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ms-communication-bank/ms-communication-bank.iml" filepath="$PROJECT_DIR$/ms-communication-bank/ms-communication-bank.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ms-communication-buyfeedback/ms-communication-buyfeedback.iml" filepath="$PROJECT_DIR$/ms-communication-buyfeedback/ms-communication-buyfeedback.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ms-communication-buyprocess/ms-communication-buyprocess.iml" filepath="$PROJECT_DIR$/ms-communication-buyprocess/ms-communication-buyprocess.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ms-communication-buytrip/ms-communication-buytrip.iml" filepath="$PROJECT_DIR$/ms-communication-buytrip/ms-communication-buytrip.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ms-communication-parent.iml" filepath="$PROJECT_DIR$/ms-communication-parent.iml" />
+    </modules>
+  </component>
+</project>
