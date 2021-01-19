@@ -2,8 +2,6 @@ package br.blog.smarti.ms.communication.buyprocess.services.bank;
 
 import java.io.IOException;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import br.blog.smarti.ms.communication.buyprocess.dtos.BankRetornoDto;
 import br.blog.smarti.ms.communication.buyprocess.dtos.CompraChaveDto;
 import br.blog.smarti.ms.communication.buyprocess.dtos.PagamentoDto;
@@ -24,11 +20,10 @@ import br.blog.smarti.ms.communication.buyprocess.dtos.PagamentoDto;
 @Service
 public class BankService {
 
-	@Value("${bank.link}")
-	private String link;
-
-	@Autowired
-	private RabbitTemplate rabbitTemplate;
+//	@Value("${bank.link}")
+	private String link = "http://localhost:8090/pagamento";
+	
+	private RestTemplate restTemplate = new RestTemplate();
 
 	public PagamentoRetorno pagar(CompraChaveDto compraChaveDto) throws IOException {
 		
@@ -37,8 +32,6 @@ public class BankService {
 		json.setCodigoSegurancaCartao(compraChaveDto.getCompraDto().getCodigoSegurancaCartao());
 		json.setValorCompra(compraChaveDto.getCompraDto().getValorPassagem());
 		
-		RestTemplate restTemplate = new RestTemplate();
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<PagamentoDto> entity = new HttpEntity<PagamentoDto>(json, headers);
@@ -46,13 +39,11 @@ public class BankService {
 		try {
 			ResponseEntity<BankRetornoDto> bankRetorno = restTemplate.exchange(link, HttpMethod.POST, entity, BankRetornoDto.class);
 			return new PagamentoRetorno(bankRetorno.getBody().getMensagem(), true);
-		}catch(HttpClientErrorException ex){
-			if( ex.getStatusCode() == HttpStatus.BAD_REQUEST ) {
-				ObjectMapper mapper = new ObjectMapper();
-				BankRetornoDto obj = mapper.readValue(ex.getResponseBodyAsString(), BankRetornoDto.class);
-				return new PagamentoRetorno(obj.getMensagem(), false);
+		}catch(HttpClientErrorException e){
+			if( e.getStatusCode() == HttpStatus.BAD_REQUEST ) {
+				return new PagamentoRetorno(e.getResponseBodyAsString(), false);
 			}
-			throw ex;
+			throw e;
 		}catch (RuntimeException ex) {
 			throw ex;
 		}
