@@ -32,7 +32,7 @@ public class PagamentoControllerTest {
 	@Autowired
 	@MockBean
 	private PagamentoService pagamentoService;
-
+	
 	@Test
 	public void should_get_hello() throws Exception {
 		this.mvc.perform(get("/hello").contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk())
@@ -47,7 +47,7 @@ public class PagamentoControllerTest {
 		pgto.setValorCompra(new BigDecimal(200));
 		ObjectMapper mapper = new ObjectMapper();
 
-		this.mvc.perform(post("/pagamento").content(mapper.writeValueAsString(pgto))
+		this.mvc.perform(post("/pagamentos").content(mapper.writeValueAsString(pgto))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.mensagem", is("Pagamento registrado com sucesso")));
 
@@ -58,7 +58,7 @@ public class PagamentoControllerTest {
 		PagamentoDto pgto = new PagamentoDto();
 		ObjectMapper mapper = new ObjectMapper();
 
-		this.mvc.perform(post("/pagamento").content(mapper.writeValueAsString(pgto))
+		this.mvc.perform(post("/pagamentos").content(mapper.writeValueAsString(pgto))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isBadRequest());
 	}
 
