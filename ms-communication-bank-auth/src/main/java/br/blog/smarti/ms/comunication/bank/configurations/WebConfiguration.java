@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -30,6 +31,7 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
   @Bean
   @Primary
   @Scope(scopeName = SCOPE_REQUEST, proxyMode = TARGET_CLASS)
+  @Profile("!test")
   public KeycloakSecurityContext securityContext() {
     RefreshableKeycloakSecurityContext context =
         (RefreshableKeycloakSecurityContext) RequestContextHolder.currentRequestAttributes()

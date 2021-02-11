@@ -6,6 +6,15 @@ public class RetornoDto {
 
   private String mensagem;
   private String uri;
+  private String token;
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
 
   public RetornoDto() {}
 

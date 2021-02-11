@@ -39,6 +39,15 @@ services:
       - 8600:53/udp
       - 8500:8500
       - 8400:8400
+      
+  auth_openid:
+    container_name: msc-keycloak
+    image: quay.io/keycloak/keycloak:12.0.1
+    ports:
+      - 8080:8080
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
 
 volumes:
   dbdata:

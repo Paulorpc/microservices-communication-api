@@ -20,21 +20,11 @@ public abstract class AbstractController {
 
   private static final String ROLE_ADMIN = ADMIN.getValue();
   private static final String ROLE_USER = USER.getValue();
-  private static final String ATTR_INITIATOR = "initiator";
   private static final String ATTR_EMAIL = "email";
   private static final String ATTR_USERNAME = "username";
-  private static final String ATTR_ORG_UUID = "organization-uuid";
 
   @Autowired
   private KeycloakSecurityContext securityContext;
-
-  public String getInitiator() {
-    return (String) securityContext.getToken().getOtherClaims().get(ATTR_INITIATOR);
-  }
-
-  public String getOrganizationUuid() {
-    return (String) securityContext.getToken().getOtherClaims().get(ATTR_ORG_UUID);
-  }
 
   public String getEmail() {
     return StringUtils.defaultIfBlank(
