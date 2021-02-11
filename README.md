@@ -75,13 +75,13 @@ $ curl -X POST http://localhost:<port>/auth/realms/<realm>/protocol/openid-conne
 ```
 
 #### Configuração e Testes
-É importante observar que em `WebConfiguration` possui um método que cria uma instância do contexto de segurança do keycloak (`securityContext`) com a autenticação e dados do token. Para fazer testes dos controllers é necessário criar o `mock` do securityContext, pois estão sendo usadas informações (`.OtherClaims()`) contidas no token. Para isso, é preciso criar um classe de configuração nos testes que retorna uma instância do `securityContext mockada` ao invés de subir a instância do securityContext da classe WebConfiguration. Um detalhe importante é que foi preciso criar um perfil para desenvolvimento  específico (`dev`) para rodar o ambiente de testes da aplicação, caso contrário o spring tentará subir os dois Beans do securityContext e o contexto da aplicação não irá subir.
+É importante observar que em `WebConfiguration` possui um método que cria uma instância do contexto de segurança do keycloak (`securityContext`) com a autenticação e dados do token. Para fazer testes dos controllers é necessário criar o `mock` do securityContext, pois estão sendo usadas informações (`.OtherClaims()`) contidas no token. Para isso, é preciso criar um classe de configuração nos testes que retorna uma instância do `securityContext mockada` ao invés de subir a instância do securityContext da classe WebConfiguration. Um detalhe importante é que foi preciso criar um perfil específico (`tests`) para rodar o ambiente de testes da aplicação, caso contrário o spring tentará subir os dois Beans do securityContext e o contexto da aplicação não irá subir.
 ```shell
 #usando parâmetro da JVM para indicar ambiente de desenvolvimento
 -Dspring.profiles.active=dev
 ```
 
-Para rodar os tests e subir o securityContext mockado, é necessário executá-los no perfil `test`. Para isso foi adicionado na `ApiTest` a anotacão `@ActivateProfile`, garantindo que todos testes que extenderem essa classe, funcionarão. Por garantia, é possível rodar os tests no maven forçando o perfil.
+Foi adicionado na classe `ApiTest` a anotacão `@ActivateProfile`, garantindo que todos testes que extenderem essa classe, funcionarão. Por garantia, é possível rodar os tests no maven forçando o perfil.
 ```shell
 mvn test -Dspring.profiles.active=test 
 ```
