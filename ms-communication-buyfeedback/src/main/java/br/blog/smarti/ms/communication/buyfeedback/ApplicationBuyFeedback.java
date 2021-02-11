@@ -8,8 +8,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @EnableRedisRepositories
 public class ApplicationBuyFeedback {
 
-    public static void main(String[] args) throws InterruptedException {
-        SpringApplication.run(ApplicationBuyFeedback.class, args);
-    }
-
+  public static void main(String[] args) throws InterruptedException {
+    SpringApplication.run(ApplicationBuyFeedback.class, args);
+  }
 }

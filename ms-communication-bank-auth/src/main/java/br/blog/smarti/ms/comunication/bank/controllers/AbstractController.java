@@ -2,6 +2,8 @@ package br.blog.smarti.ms.comunication.bank.controllers;
 
 import static br.blog.smarti.ms.comunication.bank.securities.SecurityRolesEnum.ADMIN;
 import static br.blog.smarti.ms.comunication.bank.securities.SecurityRolesEnum.USER;
+
+import br.blog.smarti.ms.comunication.bank.securities.SecurityUtils;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import br.blog.smarti.ms.comunication.bank.securities.SecurityUtils;
 
 /***
  *  Notes about keycloack security context
@@ -23,15 +24,14 @@ public abstract class AbstractController {
   private static final String ATTR_EMAIL = "email";
   private static final String ATTR_USERNAME = "username";
 
-  @Autowired
-  private KeycloakSecurityContext securityContext;
+  @Autowired private KeycloakSecurityContext securityContext;
 
   public String getEmail() {
     return StringUtils.defaultIfBlank(
         (String) securityContext.getToken().getOtherClaims().get(ATTR_EMAIL),
         securityContext.getToken().getEmail());
   }
-  
+
   public String getUsername() {
     return StringUtils.defaultIfBlank(
         (String) securityContext.getToken().getOtherClaims().get(ATTR_USERNAME),
@@ -50,12 +50,11 @@ public abstract class AbstractController {
     return isUserInRole(ROLE_USER);
   }
 
-  protected ResponseEntity<?> processOnlyIf(BooleanSupplier test,
-      Supplier<ResponseEntity<?>> runnable) {
+  protected ResponseEntity<?> processOnlyIf(
+      BooleanSupplier test, Supplier<ResponseEntity<?>> runnable) {
     if (!test.getAsBoolean()) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
     return runnable.get();
   }
-
 }

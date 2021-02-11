@@ -1,6 +1,7 @@
 package br.blog.smarti.ms.comunication.bank.securities;
 
 import static br.blog.smarti.ms.comunication.bank.securities.SecurityRolesEnum.*;
+
 import java.util.Collection;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,5 +26,4 @@ public class SecurityUtils {
     return authorities.stream()
         .anyMatch(authority -> roleWithPrefix.equals(authority.getAuthority()));
   }
-
 }

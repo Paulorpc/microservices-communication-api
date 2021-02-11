@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BankRetornoDto {
-	
-	private String mensagem;
 
+  private String mensagem;
 }

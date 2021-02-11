@@ -1,6 +1,5 @@
 package br.blog.smarti.ms.comunication.bank.configuration;
 
-
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
@@ -21,7 +20,7 @@ import org.springframework.context.annotation.Scope;
  * do securityContext da classe main.configuration.WebConfiguration. Um detalhe importante é que o
  * profile deve ser específico para o ambiente de teste, caso contrário tentará subir os dois Beans
  * do securityContext e o contexto da aplicação não irá subir.
- * 
+ *
  * https://docs.spring.io/spring-security/site/docs/4.2.x/reference/html/test-method.html
  */
 

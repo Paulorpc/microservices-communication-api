@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class ExceptionHandlerController {
 
-    @ExceptionHandler(NaoFinalizadoException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public String process(NaoFinalizadoException ex) {
-        return "Compra ainda não finalizada.";
-    }
-
+  @ExceptionHandler(NaoFinalizadoException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  @ResponseBody
+  public String process(NaoFinalizadoException ex) {
+    return "Compra ainda não finalizada.";
+  }
 }

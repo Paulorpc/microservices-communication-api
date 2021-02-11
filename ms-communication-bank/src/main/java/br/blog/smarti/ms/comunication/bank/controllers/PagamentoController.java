@@ -1,12 +1,10 @@
 package br.blog.smarti.ms.comunication.bank.controllers;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import br.blog.smarti.ms.comunication.bank.dtos.PagamentoDto;
 import br.blog.smarti.ms.comunication.bank.dtos.RetornoDto;
 import br.blog.smarti.ms.comunication.bank.services.PagamentoService;
-
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PagamentoController {
 
-  @Autowired
-  private PagamentoService pagamentoService;
-
+  @Autowired private PagamentoService pagamentoService;
 
   @RequestMapping(path = "/hello", method = RequestMethod.GET)
   public String status() {

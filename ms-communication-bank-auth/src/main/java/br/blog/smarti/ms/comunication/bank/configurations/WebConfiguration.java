@@ -2,6 +2,7 @@ package br.blog.smarti.ms.comunication.bank.configurations;
 
 import static org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS;
 import static org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST;
+
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
@@ -23,7 +24,10 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
 
   @Override
   protected void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/**").allowedOrigins("*").allowedMethods("POST,PUT,GET,DELETE,OPTIONS")
+    registry
+        .addMapping("/**")
+        .allowedOrigins("*")
+        .allowedMethods("POST,PUT,GET,DELETE,OPTIONS")
         .allowedHeaders("Location", "Content-type", "authorization", "x-sign-certificate")
         .exposedHeaders("Location", "Content-Disposition");
   }
@@ -34,8 +38,10 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
   @Profile("!test")
   public KeycloakSecurityContext securityContext() {
     RefreshableKeycloakSecurityContext context =
-        (RefreshableKeycloakSecurityContext) RequestContextHolder.currentRequestAttributes()
-            .getAttribute(KeycloakSecurityContext.class.getName(), RequestAttributes.SCOPE_REQUEST);
+        (RefreshableKeycloakSecurityContext)
+            RequestContextHolder.currentRequestAttributes()
+                .getAttribute(
+                    KeycloakSecurityContext.class.getName(), RequestAttributes.SCOPE_REQUEST);
     return context;
   }
 }

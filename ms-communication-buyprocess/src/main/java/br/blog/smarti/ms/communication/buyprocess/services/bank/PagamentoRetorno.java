@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PagamentoRetorno {
-    private String mensagem;
-    private boolean pagamentoOK;
-
+  private String mensagem;
+  private boolean pagamentoOK;
 }

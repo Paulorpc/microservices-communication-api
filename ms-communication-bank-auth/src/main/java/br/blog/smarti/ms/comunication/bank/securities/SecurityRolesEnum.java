@@ -1,8 +1,9 @@
 package br.blog.smarti.ms.comunication.bank.securities;
 
 public enum SecurityRolesEnum {
-  
-  PREFIX("ROLE_"), ADMIN("admin"), USER("user");
+  PREFIX("ROLE_"),
+  ADMIN("admin"),
+  USER("user");
 
   private String value;
 
@@ -13,5 +14,4 @@ public enum SecurityRolesEnum {
   public String getValue() {
     return value;
   }
-
 }

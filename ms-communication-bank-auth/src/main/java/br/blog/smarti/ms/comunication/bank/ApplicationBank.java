@@ -8,8 +8,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @EntityScan
 public class ApplicationBank {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ApplicationBank.class, args);
-	}	
-	
+  public static void main(String[] args) {
+    SpringApplication.run(ApplicationBank.class, args);
+  }
 }
