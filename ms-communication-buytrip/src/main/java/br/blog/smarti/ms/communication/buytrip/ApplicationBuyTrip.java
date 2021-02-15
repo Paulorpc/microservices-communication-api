@@ -8,8 +8,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @EntityScan
 public class ApplicationBuyTrip {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ApplicationBuyTrip.class, args);
-    }
-
+  public static void main(String[] args) {
+    SpringApplication.run(ApplicationBuyTrip.class, args);
+  }
 }

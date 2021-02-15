@@ -1,14 +1,16 @@
 package br.blog.smarti.ms.communication.buyprocess.services.processar;
 
-import java.io.IOException;
-
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-
 import br.blog.smarti.ms.communication.buyprocess.dtos.CompraChaveDto;
 import br.blog.smarti.ms.communication.buyprocess.dtos.CompraFinalizadaDto;
 import br.blog.smarti.ms.communication.buyprocess.services.bank.BankService;
 import br.blog.smarti.ms.communication.buyprocess.services.bank.PagamentoRetorno;
-
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -16,51 +18,50 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Service
 public class ListenerService {
 
-	@Autowired
-	private BankService bank;
+  private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	private RabbitTemplate rabbitTemplate;
+  @Autowired private BankService bankService;
 
-	@Value("${fila.entrada}")
-	private String nomeFilaRepublicar;
+  @Autowired private RabbitTemplate rabbitTemplate;
 
-	@Value("${fila.finalizado}")
-	private String nomeFilaFinalizado;
+  @Value("${fila.erro}")
+  private String nomeFilaRepublicar;
 
-	@HystrixCommand(fallbackMethod = "republicOnMessage")
-	@RabbitListener(queues="${fila.entrada}")
-    public void onMessage(Message message) throws JsonParseException, JsonMappingException, IOException  {
-		
-		String json = new String(message.getBody(), "UTF-8");
-		
-		System.out.println("Mensagem recebida:"+json);
-		
-		ObjectMapper mapper = new ObjectMapper();
-		CompraChaveDto compraChaveDto = mapper.readValue(json, CompraChaveDto.class);
+  @Value("${fila.finalizado}")
+  private String nomeFilaFinalizado;
 
-		PagamentoRetorno pg = bank.pagar(compraChaveDto);
+  @HystrixCommand(fallbackMethod = "republicOnMessage")
+  @RabbitListener(queues = "${fila.entrada}")
+  public void onMessage(Message message) throws Exception {
 
-		CompraFinalizadaDto compraFinalizadaDto = new CompraFinalizadaDto();
-		compraFinalizadaDto.setCompraChaveDto(compraChaveDto);
-		compraFinalizadaDto.setPagamentoOK(pg.isPagamentoOK());
-		compraFinalizadaDto.setMensagem(pg.getMensagem());
+    String json = new String(message.getBody(), "UTF-8");
 
-		org.codehaus.jackson.map.ObjectMapper obj = new org.codehaus.jackson.map.ObjectMapper();
-		String jsonFinalizado = obj.writeValueAsString(compraFinalizadaDto);
+    LOG.info("Mensagem recebida: {}", json);
 
-		rabbitTemplate.convertAndSend(nomeFilaFinalizado, jsonFinalizado);
-    }
+    ObjectMapper mapper = new ObjectMapper();
+    CompraChaveDto compraChaveDto = mapper.readValue(json, CompraChaveDto.class);
 
-	public void republicOnMessage(Message message) throws JsonParseException, JsonMappingException, IOException  {
-		System.out.println("Republicando mensagem...");
-		rabbitTemplate.convertAndSend(nomeFilaRepublicar, message);
-	}
+    PagamentoRetorno pg = bankService.pagar(compraChaveDto);
+
+    CompraFinalizadaDto compraFinalizadaDto = new CompraFinalizadaDto();
+    compraFinalizadaDto.setCompraChaveDto(compraChaveDto);
+    compraFinalizadaDto.setPagamentoOK(pg.isPagamentoOK());
+    compraFinalizadaDto.setMensagem(pg.getMensagem());
+
+    org.codehaus.jackson.map.ObjectMapper obj = new org.codehaus.jackson.map.ObjectMapper();
+    String jsonFinalizado = obj.writeValueAsString(compraFinalizadaDto);
+
+    rabbitTemplate.convertAndSend(nomeFilaFinalizado, jsonFinalizado);
+    LOG.info("Mensagem processada e enviada para fila de finalizado: {}", jsonFinalizado);
+  }
+
+  public void republicOnMessage(Message message)
+      throws JsonParseException, JsonMappingException, IOException {
+    LOG.error("Erro ao processar msg. Republicando... : {}", nomeFilaRepublicar);
+    System.out.println();
+    rabbitTemplate.convertAndSend(nomeFilaRepublicar, message);
+  }
 }

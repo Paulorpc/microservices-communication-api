@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RetornoDto {
-	
-	private String mensagem;
-	private String chavePesquisa;
 
+  private String mensagem;
+  private String chavePesquisa;
 }

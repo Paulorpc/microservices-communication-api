@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CompraFinalizadaDto {
 
-    private CompraChaveDto compraChaveDto;
-    private String mensagem;
-    private boolean pagamentoOK;
+  private CompraChaveDto compraChaveDto;
+  private String mensagem;
+  private boolean pagamentoOK;
 }

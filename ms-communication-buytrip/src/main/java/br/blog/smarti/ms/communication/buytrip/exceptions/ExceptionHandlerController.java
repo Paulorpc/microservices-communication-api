@@ -11,19 +11,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class ExceptionHandlerController {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public String process(MethodArgumentNotValidException ex) {
-    	
-    	StringBuilder sb = new StringBuilder();
-    	
-    	for( ObjectError item : ex.getBindingResult().getAllErrors() ){
-    		sb.append(item.getDefaultMessage());
-    		sb.append("\n");
-    	}
-    	
-        return sb.toString();
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  @ResponseBody
+  public String process(MethodArgumentNotValidException ex) {
+
+    StringBuilder sb = new StringBuilder();
+
+    for (ObjectError item : ex.getBindingResult().getAllErrors()) {
+      sb.append(item.getDefaultMessage());
+      sb.append("\n");
     }
-    
+
+    return sb.toString();
+  }
 }

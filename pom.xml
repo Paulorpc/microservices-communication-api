@@ -11,6 +11,7 @@
 	<name>ms-communication-parent</name>
 	<modules>
 		<module>ms-communication-bank</module>
+		<module>ms-communication-bank-auth</module>
 		<module>ms-communication-buytrip</module>
 		<module>ms-communication-buyprocess</module>
 		<module>ms-communication-buyfeedback</module>

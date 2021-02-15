@@ -1,9 +1,6 @@
 package br.blog.smarti.ms.communication.buyfeedback.repositories;
 
+import br.blog.smarti.ms.communication.buyfeedback.entities.CompraRedis;
 import org.springframework.data.repository.CrudRepository;
 
-import br.blog.smarti.ms.communication.buyfeedback.entities.CompraRedis;
-
-public interface CompraRedisRepository extends CrudRepository<CompraRedis, String> {
-
-}
+public interface CompraRedisRepository extends CrudRepository<CompraRedis, String> {}
