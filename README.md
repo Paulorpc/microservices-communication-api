@@ -31,11 +31,9 @@ REST API resposável pela recepção de compra. Recebe a requisição de compra 
 API resposável pelo processamento do pagamento. Faz a recepção das mensagem na fila de aguardando compra, enviará para a API de banco processar o pagamento e envia msg para fila de compras finalizadas. Se o API do banco estiver fora por alguma razão a msg é republicada na fila de compras aguardando processamento para processamento. 
 
 
-#### ms-communication-bank
-REST API resposável pela recepição do pagamento, validar cartão e saldo e atualizar conta do usuário. 
-
 #### ms-communication-bank-auth
-REST API resposável pela recepição do pagamento, validar cartão e saldo e atualizar conta do usuário. Este módulo é uma extensão do módulo `ms-communication-bank` com `spring-security` e integração com `Keycloak` para fazer a autenticação de usuários. Após finalizado, o módulo bank original deverá ser desativado.
+REST API resposável pela recepição do pagamento, validar cartão e saldo e atualizar conta do usuário. Este módulo possui regras de segurança e autenticação de usuários utilizando `spring-security` e integração com `Keycloak`. Para se autenticar é necessário enviar um uma requisição com `autenticação` do tipo `Bearer Token`. Detalhes na seção Keycloak.
+
 
 #### ms-communication-buyfeedback
 REST API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem na fila de compras finalizadas, registrando a coleção no banco Redis (no-sql).
@@ -58,12 +56,12 @@ $ create database banco;
 ```
 
 ### KEYCLOAK
-Após rodar o docker-compose.yml, é necessário realizar algumas etapas para configurar a integração entre API/Keycloak
-1. Importar o arquivo `keycloak-realm-config.json` localizado na raiz do projeto parent;
+Após rodar o docker-compose.yml, é necessário realizar algumas etapas para configurar o keycloack e a integração entre API/Keycloak:
+1. Importar o arquivo de configuração do keycloack localizado na raiz do projeto parent: `keycloak-realm-config.json`;
 2. Configurar o `secret` gerado do client no `application.properties`.
 
 #### Token
-Para recuperar o token de um determinado usuário é necessário enviar uma requisição http para o servidor keycloak.
+A autenticação nas APIs protegidas com autenticação através do `spring security + keycloack` devem ser feitas através de um token váido (não expirado). Para isso é necessário fazer uma requisição à API do keycloack solicitando o token de um determinado usuário através de seu username e password.
 ```shell
 $ curl -X POST http://localhost:<port>/auth/realms/<realm>/protocol/openid-connect/token \
 --header 'Content-Type: application/x-www-form-urlencoded' \
@@ -72,6 +70,14 @@ $ curl -X POST http://localhost:<port>/auth/realms/<realm>/protocol/openid-conne
 --data-urlencode 'client_secret=<secret>' \
 --data-urlencode 'username=<username>' \
 --data-urlencode 'password=<password>';
+```
+
+#### Acesso a API protegida (MS-BANK-AUTH)
+A API `ms-bank-auth` possui serviços de acesso livre e outros que necessitam usuários autenticados. No arquivo de configuração web (`webSecurityConfig.java`) é possível verificar com mais detalhes as regras de acesso. Para acessar os seviços autenticados, é necessário fazer uma requisição com a autorização do tipo `Bearer Token`, enviando um token válido (detalhes acima). Segue exemplo de conexão.
+```shell
+$ curl -X GET http://localhost:<port>/hello
+$ curl -X GET http://localhost:<port>/api/users/1 --header 'Authorization: bearer <user|admin_token>'
+$ curl -X GET http://localhost:<port>/api/admins --header 'Authorization: bearer <admin_token>'
 ```
 
 #### Configuração e Testes
