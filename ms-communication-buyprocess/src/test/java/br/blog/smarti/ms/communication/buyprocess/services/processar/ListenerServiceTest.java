@@ -8,11 +8,11 @@ import br.blog.smarti.ms.communication.buyprocess.dtos.CompraDto;
 import br.blog.smarti.ms.communication.buyprocess.services.bank.BankService;
 import br.blog.smarti.ms.communication.buyprocess.services.bank.PagamentoRetorno;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.UUID;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -37,12 +37,12 @@ public class ListenerServiceTest {
 
   @Rule public ExpectedException expectedException = ExpectedException.none();
 
-  @Test
-  public void receive_message_finished_payment()
-      throws JsonParseException, JsonMappingException, IOException {
-    CompraChaveDto compraChave = new CompraChaveDto();
-    CompraDto compra = new CompraDto();
+  CompraChaveDto compraChave = new CompraChaveDto();
+  CompraDto compra = new CompraDto();
+  Message message;
 
+  @Before
+  public void setup() throws JsonProcessingException {
     compra.setCodigoPassagem(1);
     compra.setCodigoSegurancaCartao(123456);
     compra.setNroCartao(12);
@@ -51,8 +51,11 @@ public class ListenerServiceTest {
     compraChave.setCompraDto(compra);
 
     ObjectMapper mapper = new ObjectMapper();
-    Message message = new Message(mapper.writeValueAsBytes(compraChave), new MessageProperties());
+    message = new Message(mapper.writeValueAsBytes(compraChave), new MessageProperties());
+  }
 
+  @Test
+  public void receive_message_finished_payment() throws Exception {
     when(bank.pagar(compraChave)).thenReturn(new PagamentoRetorno("sucesso", true));
 
     String eMsg = "json serializado e pronto pra envio para fila";
@@ -65,21 +68,7 @@ public class ListenerServiceTest {
   }
 
   @Test
-  public void receive_message_not_fineshed_payment_bank_api_fail()
-      throws JsonParseException, JsonMappingException, IOException {
-    CompraChaveDto compraChave = new CompraChaveDto();
-    CompraDto compra = new CompraDto();
-
-    compra.setCodigoPassagem(1);
-    compra.setCodigoSegurancaCartao(123456);
-    compra.setNroCartao(12);
-    compra.setValorPassagem(new BigDecimal(200));
-    compraChave.setChave(UUID.randomUUID().toString());
-    compraChave.setCompraDto(compra);
-
-    ObjectMapper mapper = new ObjectMapper();
-    Message message = new Message(mapper.writeValueAsBytes(compraChave), new MessageProperties());
-
+  public void receive_message_not_fineshed_payment_bank_api_fail() throws Exception {
     when(bank.pagar(compraChave)).thenReturn(new PagamentoRetorno("error message", false));
 
     String eMsg = "json serializado e pronto pra envio para fila";
@@ -92,8 +81,7 @@ public class ListenerServiceTest {
   }
 
   @Test
-  public void receive_invalid_message_not_finished_payment()
-      throws JsonParseException, JsonMappingException, IOException {
+  public void receive_invalid_message_not_finished_payment() throws Exception {
     Message message = new Message("{json: invalid object}".getBytes(), new MessageProperties());
 
     // should have parse error in mapper.readValue()
