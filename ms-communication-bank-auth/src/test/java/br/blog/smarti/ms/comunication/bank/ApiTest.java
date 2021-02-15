@@ -1,6 +1,7 @@
 package br.blog.smarti.ms.comunication.bank;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,7 @@ public class ApiTest {
   public void init() {
     mvc =
         MockMvcBuilders.webAppContextSetup(webApplicationContext)
-            // .alwaysDo(print())
+            //.alwaysDo(print())
             .apply(springSecurity())
             .build();
 

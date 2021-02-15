@@ -8,15 +8,11 @@ public class RetornoDto {
   private String uri;
   private String token;
 
-  public String getToken() {
-    return token;
-  }
-
-  public void setToken(String token) {
-    this.token = token;
-  }
-
   public RetornoDto() {}
+
+  public RetornoDto(URI uri) {
+    this.uri = uri.toString();
+  }
 
   public RetornoDto(String mensagem) {
     this.mensagem = mensagem;
@@ -41,5 +37,13 @@ public class RetornoDto {
 
   public void setUri(URI uri) {
     this.uri = uri.toString();
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
   }
 }

@@ -2,6 +2,7 @@ package br.blog.smarti.ms.comunication.bank.controllers;
 
 import br.blog.smarti.ms.comunication.bank.dtos.PagamentoDto;
 import br.blog.smarti.ms.comunication.bank.dtos.RetornoDto;
+import br.blog.smarti.ms.comunication.bank.exceptions.PagamentoException;
 import br.blog.smarti.ms.comunication.bank.services.PagamentoService;
 import java.net.URI;
 import javax.validation.Valid;
@@ -47,7 +48,9 @@ public class PagamentoController extends AbstractController {
   public ResponseEntity<RetornoDto> getUserNoTokenAsRequestHeaderParameter() {
     LOG.info("Rest Controller: getUserNoTokenAsRequestHeaderParameter");
     String role = isAdmin() ? " (Admin)" : " (User)";
-    return ResponseEntity.ok(new RetornoDto("Hello " + getUsername() + " - " + role, getUri()));
+    return ResponseEntity.ok(
+        new RetornoDto(
+            "Hello " + getUsername() + " - " + role + " - " + getEstadoCivil(), getUri()));
   }
 
   /***
@@ -63,7 +66,9 @@ public class PagamentoController extends AbstractController {
     String role = isAdmin() ? " (Admin)" : " (User)";
     StringBuilder token = new StringBuilder(authorization.replace("Bearer ", ""));
     RetornoDto retorno =
-        new RetornoDto("Hello " + getUsername() + " - " + getEmail() + role, getUri());
+        new RetornoDto(
+            "Hello " + getUsername() + " - " + getEmail() + role + " - " + getEstadoCivil(),
+            getUri());
     retorno.setToken(token.toString());
     return ResponseEntity.ok(retorno);
   }
@@ -74,8 +79,11 @@ public class PagamentoController extends AbstractController {
   @RequestMapping(value = "/api/admins", method = RequestMethod.GET)
   public ResponseEntity<RetornoDto> getAdmin() {
     LOG.info("Rest Controller: getAdmin");
+    String role = " (Admin)";
     return ResponseEntity.ok(
-        new RetornoDto("Hello " + getUsername() + " - " + getEmail() + " (Admin)", getUri()));
+        new RetornoDto(
+            "Hello " + getUsername() + " - " + getEmail() + role + " - " + getEstadoCivil(),
+            getUri()));
   }
 
   @RequestMapping(path = "/pagamentos", method = RequestMethod.POST)
@@ -96,9 +104,17 @@ public class PagamentoController extends AbstractController {
       @Valid @NotNull @RequestBody PagamentoDto pagamentoDto) {
     LOG.info("Rest Controller: pagamentoAuthenticated");
 
-    pagamentoService.pagamento(pagamentoDto);
+    RetornoDto retorno = new RetornoDto(getUri());
 
-    RetornoDto retorno = new RetornoDto("Pagamento registrado com sucesso", getUri());
+    try {
+      pagamentoService.pagamento(pagamentoDto);
+    } catch (PagamentoException e) {
+      LOG.info(e.getMessage());
+      retorno.setMensagem(e.getMessage());
+      return ResponseEntity.badRequest().body(retorno);
+    }
+
+    retorno.setMensagem("Pagamento registrado com sucesso");
     return ResponseEntity.ok(retorno);
   }
 

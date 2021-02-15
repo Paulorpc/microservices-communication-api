@@ -23,6 +23,7 @@ public abstract class AbstractController {
   private static final String ROLE_USER = USER.getValue();
   private static final String ATTR_EMAIL = "email";
   private static final String ATTR_USERNAME = "username";
+  private static final String ATTR_ESTADOCIVIL = "estadocivil";
 
   @Autowired private KeycloakSecurityContext securityContext;
 
@@ -36,6 +37,11 @@ public abstract class AbstractController {
     return StringUtils.defaultIfBlank(
         (String) securityContext.getToken().getOtherClaims().get(ATTR_USERNAME),
         securityContext.getToken().getPreferredUsername());
+  }
+
+  public String getEstadoCivil() {
+    return StringUtils.defaultIfBlank(
+        (String) securityContext.getToken().getOtherClaims().get(ATTR_ESTADOCIVIL), "");
   }
 
   protected boolean isUserInRole(final String role) {
