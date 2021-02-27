@@ -21,22 +21,24 @@ Dependências Relevantes:
 5. keycloak Spring Boot Starter (Authentication Server)
 
 
-### MÓDULOS
+### ARQUITETURA
+
+![Image](https://github.com/Paulorpc/microservices-communication-api/ms-communication.png)
 
 #### ms-communication-buytrip
-REST API resposável pela recepção de compra. Recebe a requisição de compra e envia para fila de entrada onde fica aguardando processamento.
+REST API resposável pela recepção de compra. Recebe a compra e envia para `fila` de entrada onde fica `aguardando processamento`.
 
 
 #### ms-communication-buyprocess
-API resposável pelo processamento do pagamento. Faz a recepção das mensagem na fila de aguardando compra, enviará para a API de banco processar o pagamento e envia msg para fila de compras finalizadas. Se o API do banco estiver fora por alguma razão a msg é republicada na fila de compras aguardando processamento para processamento. 
+Componente resposável pelo processamento do pagamento. Faz a recepção das mensagem da fila de aguardando compra, faz uma requisição para a API de banco processar o pagamento e envia uma mensagem para `fila` de `compras finalizadas`. Se a API do banco estiver fora por alguma razão a msg é republicada na fila de compras aguardando processamento para processamento. 
 
 
 #### ms-communication-bank-auth
-REST API resposável pela recepição do pagamento, validar cartão e saldo e atualizar conta do usuário. Este módulo possui regras de segurança e autenticação de usuários utilizando `spring-security` e integração com `Keycloak`. Para se autenticar é necessário enviar um uma requisição com `autenticação` do tipo `Bearer Token`. Detalhes na seção Keycloak.
+REST API resposável pela recepção do pagamento, validar cartão e saldo e atualizar conta do usuário. Este módulo possui regras de segurança e autenticação de usuários utilizando `spring-security` e integração com `Keycloak`. Para se autenticar é necessário enviar um uma requisição com `autenticação` do tipo `Bearer Token`. Detalhes na seção Keycloak.
 
 
 #### ms-communication-buyfeedback
-REST API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem na fila de compras finalizadas, registrando a coleção no banco Redis (no-sql).
+REST API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem da fila de compras finalizadas, registrando a coleção no banco Redis (no-sql).
 
 
 ### AMBIENTE DESENVOLVIMENTO
