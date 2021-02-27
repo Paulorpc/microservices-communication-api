@@ -22,9 +22,6 @@ Dependências Relevantes:
 
 
 ### ARQUITETURA
-
-![Image](https://github.com/Paulorpc/microservices-communication-api/ms-communication.png)
-
 #### ms-communication-buytrip
 REST API resposável pela recepção de compra. Recebe a compra e envia para `fila` de entrada onde fica `aguardando processamento`.
 
@@ -39,6 +36,9 @@ REST API resposável pela recepção do pagamento, validar cartão e saldo e atu
 
 #### ms-communication-buyfeedback
 REST API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem da fila de compras finalizadas, registrando a coleção no banco Redis (no-sql).
+
+
+<img src="ms-communication.png" width="75%"/>
 
 
 ### AMBIENTE DESENVOLVIMENTO
