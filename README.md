@@ -38,7 +38,7 @@ REST API resposável pela recepção do pagamento, validar cartão e saldo e atu
 REST API responsável pelo feedback da compra ao cliente. Faz a recepção das mensagem da fila de compras finalizadas, registrando a coleção no banco Redis (no-sql).
 
 
-<img src="ms-communication.png" width="75%"/>
+<img src="ms-communication.png" width="90%"/>
 
 
 ### AMBIENTE DESENVOLVIMENTO
@@ -102,10 +102,10 @@ Notas sobre keycloack security context
 ### RABBITMQ
 Após rodar o docker-compose.yml, é necessário criar as filas usadas pelo sistema. Para isso, basta acessar a tab queus e criar as filas necessárias. 
 Atenção para o nome que deve ser identico ao configurado no `application.properties` da API. 
-- fila-saida:    `fila-compras-aguardando`
+- fila-entrada:    `fila-compras-aguardando`
   Fila de compras realizada aguardando processamento do pagamento
 
-- fila-entrada:  `fila-compras-finalizado`
+- fila-saída:  `fila-compras-finalizado`
   Fila de compras processadas
 
 
